@@ -1,0 +1,32 @@
+# keys
+keys/
+**/keys/gcp_n8n
+**/keys/*.pub
+*.pem
+*.key
+
+# env
+.env
+*.json
+
+# terraform
+.terraform/
+*.tfvars
+*.tfvars.json
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# docker & n8n
+traefik_data/
+db_data/
+n8n_data/
+node_modules/
+npm-debug.log*
+
+# system & editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+Thumbs.db
