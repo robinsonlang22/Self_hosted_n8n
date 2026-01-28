@@ -5,8 +5,7 @@ keys/
 *.pem
 *.key
 
-# env
-.env
+# json
 *.json
 
 # terraform
