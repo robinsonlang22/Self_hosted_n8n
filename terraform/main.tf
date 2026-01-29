@@ -36,6 +36,7 @@ resource "google_compute_instance" "n8n_server" {
   name         = "n8n-server"
   machine_type = var.machine_type
 
+  # the path of public ssh-key
   metadata = {
     ssh-keys = "n8n_user:${trimspace(file(var.ssh_public_key))}"
   }

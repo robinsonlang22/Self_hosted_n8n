@@ -1,26 +1,26 @@
 variable "credentials" {
   description = "my credentials"
-  default     = " "
+  default     = "./keys/my_credentials.json"
 }
 
 variable "ssh_public_key" {
   description = "ssh_public_key"
-  default     = " "
+  default     = "./keys/id_ed25519.pub"
 }
 
 variable "project_id" {
   description = "Project"
-  default     = " "
+  default     = "n8n-server-485710"
 }
 
 variable "region" {
   description = "Region"
-  default     = " "
+  default     = "europe-west3"
 }
 
 variable "zone" {
   description = "Zone"
-  default     = " "
+  default     = "europe-west3-a"
 }
 
 variable "ports" {
