@@ -37,7 +37,7 @@ resource "google_compute_instance" "n8n_server" {
   machine_type = var.machine_type
 
   metadata = {
-    ssh-keys = "n8n_user:${trimspace(file("./keys/gcp_n8n.pub"))}"
+    ssh-keys = "n8n_user:${trimspace(file(var.ssh_public_key))}"
   }
 
   boot_disk {
