@@ -42,8 +42,6 @@ resource "google_compute_firewall" "allow_iap_ssh" {
     ports    = ["22"]
   }
 
-  # 核心解药：这是 Google IAP 中转服务器的专用 IP 段
-  # 只有来自这里的流量才允许通过 22 端口，其他的（比如公网黑客）全部拦截
   source_ranges = ["35.235.240.0/20"]
 }
 

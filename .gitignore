@@ -10,6 +10,7 @@ keys/
 
 # json
 *.json
+！Halle-Weather-Assistant.json
 
 # terraform
 .terraform/

@@ -139,26 +139,3 @@ resource "google_compute_global_forwarding_rule" "n8n_https_forwarding_rule" {
   load_balancing_scheme = "EXTERNAL_MANAGED"
 }
 
-# authoriazation appointment
-# resource "google_iap_web_backend_service_iam_member" "iap_access" {
-#   project = var.project_id
-#   web_backend_service = google_compute_backend_service.n8n_backend.name
-#   role    = "roles/iap.httpsResourceAccessor"
-#   member  = "user:jiachenglang114@gmail.com"
-# }
-
-# # 专门拦截来自 VPC 内部对 n8n 80 端口的访问，防止绕过 IAP
-# resource "google_compute_firewall" "deny_internal_to_n8n_web" {
-#   name     = "deny-internal-to-n8n-web"
-#   network  = "default"
-#   priority = 900 # 优先级必须高于默认的 65534
-
-#   deny {
-#     protocol = "tcp"
-#     ports    = ["80"]
-#   }
-
-#   # 对应报错中的 default-allow-internal 网段
-#   source_ranges = ["10.128.0.0/9"]
-#   target_tags   = ["n8n-server"]
-# }
