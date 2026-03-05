@@ -1,0 +1,166 @@
+{
+  "name": "Halle Weather Assistant",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 15 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "1731ac10-57c7-4901-be5f-7b54c1591900",
+      "name": "Hourly Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -496,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.open-meteo.com/v1/forecast?latitude=51.29&longitude=11.58&current=temperature_2m,is_day&daily=sunrise,sunset&timezone=Europe%2FBerlin",
+        "options": {}
+      },
+      "id": "959a84e9-8df9-49f8-a244-208e69eec302",
+      "name": "Get Weather Data",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -272,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// 获取输入数据\nconst data = $input.first().json;\n\n// --- 1. 获取当前柏林时间 (原生 JS 写法) ---\n// 容器内部通常是 UTC，我们用 Intl API 强制转换成柏林时间\nconst nowStr = new Date().toLocaleString(\"en-US\", {timeZone: \"Europe/Berlin\"});\n// 将转换后的时间字符串重新变成 Date 对象，用于比较\nconst now = new Date(nowStr);\n\n// --- 2. 解析 API 数据 ---\n// Open-Meteo 返回的已经是柏林时间的 ISO 字符串 (e.g. \"2026-01-29T07:56\")\n// 我们直接 new Date()，虽然它会把这个时间当成容器本地时间(UTC)，\n// 但因为上面的 'now' 也是同样逻辑生成的，所以两者的“相对时间”是对齐的，可以直接比较！\nconst sunrise = new Date(data.daily.sunrise[0]);\nconst sunset = new Date(data.daily.sunset[0]);\n// 计算明天的日出 (简单加 24 小时)\nconst nextSunrise = new Date(sunrise.getTime() + 24 * 60 * 60 * 1000);\n\nlet status = \"\";\nlet timeDiffStr = \"\";\n\n// --- 3. 核心逻辑 ---\nif (now < sunrise) {\n  status = \"清晨\";\n  const diffMs = sunrise - now;\n  const hours = Math.floor(diffMs / (1000 * 60 * 60));\n  const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));\n  timeDiffStr = `${hours}小时${minutes}分钟后日出`;\n} else if (now < sunset) {\n  status = \"白天\";\n  const diffMs = sunset - now;\n  const hours = Math.floor(diffMs / (1000 * 60 * 60));\n  const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));\n  timeDiffStr = `${hours}小时${minutes}分钟后日落`;\n} else {\n  status = \"入夜\";\n  const diffMs = nextSunrise - now;\n  const hours = Math.floor(diffMs / (1000 * 60 * 60));\n  const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));\n  timeDiffStr = `${hours}小时${minutes}分钟后迎来日出`;\n}\n\n// 输出\nreturn {\n  json: {\n    current_temp: data.current.temperature_2m,\n    status: status,\n    time_diff_str: timeDiffStr\n  }\n};"
+      },
+      "id": "82eacb90-c09e-4331-b86c-87d649af5100",
+      "name": "Calculate Logic",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -48,
+        -32
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "-4892574079",
+        "text": "={{ $json.content.parts[0].text }}",
+        "additionalFields": {}
+      },
+      "id": "ffb7df89-cb96-4b58-a686-f3f737d7ff5d",
+      "name": "Send Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        496,
+        -32
+      ],
+      "webhookId": "68c8e591-7e5f-493d-84e0-4d871d858f03",
+      "credentials": {
+        "telegramApi": {
+          "id": "CDYo5BUL4nsCneVQ",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "==我们是住在德国哈勒(Halle)的一家人，你是我们的贴心、幽默且富有生活情趣的私人助理。\n现在是哈勒的{{ $json.status }}。\n当前天气数据：\n- 实时气温：{{ $json.current_temp }}°C\n- 时间进度：{{ $json.time_diff_str }}\n\n任务：\n请为我写一段70-100字左右的中文问候语。要求如下：\n1. 风格要像老朋友聊天，语气温暖，幽默。\n2. 必须包含对“小猪猪”、“小圆”和“小熊”的问候。\n3. 针对目前的温度给出穿衣或活动建议。\n4. 提醒我们日出日落时间还有多久。\n5. 如果是“入夜”状态，语气要温馨治愈；如果是“白天”，要充满动力。\n\n请直接输出正文，不要包含任何标签或元数据。"
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        160,
+        -32
+      ],
+      "id": "6e201df0-0f29-49a6-b950-017d639e5305",
+      "name": "Message a model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "4fJmENlMucayDeQm",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Hourly Schedule": {
+      "main": [
+        [
+          {
+            "node": "Get Weather Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Weather Data": {
+      "main": [
+        [
+          {
+            "node": "Calculate Logic",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculate Logic": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "Send Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false
+  },
+  "versionId": "a23bf4f8-130e-4d7b-9b3c-bd99e51c15b1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "aa1c8800557a0242c4da587bde1c9f8c02dbc8c0459566ae50cfdb27ea8eef6a"
+  },
+  "id": "5gzHgxxgGS-MZOUVyORdD",
+  "tags": []
+}
