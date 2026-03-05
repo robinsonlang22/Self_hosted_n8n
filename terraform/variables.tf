@@ -26,13 +26,13 @@ variable "zone" {
 variable "ports" {
   description = "Ports"
   type        = list(string)
-  default     = ["22", "80", "443"]
+  default     = ["80", "443"]
 }
 
 variable "source_ranges" {
   description = "source ranges"
   type        = list(string)
-  default     = ["0.0.0.0/0"]
+  default     = ["35.191.0.0/16", "130.211.0.0/22"]
 }
 
 variable "machine_type" {
@@ -40,3 +40,18 @@ variable "machine_type" {
   default     = "e2-small"
 }
 
+variable "iap_client_id" {
+  description = "Google OAuth Client ID for IAP"
+  type        = string
+}
+
+variable "iap_client_secret" {
+  description = "Google OAuth Client Secret for IAP"
+  type        = string
+  sensitive   = true
+}
+
+variable "iap_domains" {
+  description = "the domains which apply Https IAP"
+  type        = list(string)
+}

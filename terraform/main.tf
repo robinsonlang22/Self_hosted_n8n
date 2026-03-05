@@ -32,6 +32,21 @@ resource "google_compute_firewall" "n8n_firewall" {
 
 }
 
+resource "google_compute_firewall" "allow_iap_ssh" {
+  name        = "allow-iap-ssh"
+  network     = "default"
+  description = "Allow SSH access via Google Identity-Aware Proxy (IAP)"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  # 核心解药：这是 Google IAP 中转服务器的专用 IP 段
+  # 只有来自这里的流量才允许通过 22 端口，其他的（比如公网黑客）全部拦截
+  source_ranges = ["35.235.240.0/20"]
+}
+
 resource "google_compute_instance" "n8n_server" {
   name         = "n8n-server"
   machine_type = var.machine_type
