@@ -75,7 +75,7 @@ Activate the workflow to initiate the automated cron schedules.
 
 ---
 
-## 🔮 Future Roadmap: Compliance-First AI workflow: integrate HITL & RLHF
+## 🔮 Future Roadmap: Compliance-First AI workflow integrating HITL & RLHF
 The next evolution of this platform focuses on high-stakes commercial compliance by implementing Human-in-the-Loop (HITL) and Reinforcement Learning from Human Feedback (RLHF). This phase demonstrates how to constrain Large Language Models (LLMs) to ensure output quality, mitigate hallucinations, and maintain professional rigor.
 
 ### 🎯 Objective: Corporate-Aligned AI Communication
