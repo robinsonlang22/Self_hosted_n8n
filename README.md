@@ -7,7 +7,7 @@
 
 This repository contains an Infrastructure as Code (IaC) deployment and business logic workflows for a self-hosted, enterprise-grade **n8n orchestration platform**. 
 
-[cite_start]Built entirely on Google Cloud Platform (GCP)[cite: 9], this architecture is designed to handle sensitive data pipelines (such as automated payload parsing and AI-assisted data screening) by enforcing strict Zero-Trust security protocols and enabling advanced Large Language Model (LLM) orchestration.
+Built entirely on Google Cloud Platform (GCP)[cite: 9], this architecture is designed to handle sensitive data pipelines (such as automated payload parsing and AI-assisted data screening) by enforcing strict Zero-Trust security protocols and enabling advanced Large Language Model (LLM) orchestration.
 
 ---
 
