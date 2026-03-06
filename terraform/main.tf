@@ -14,9 +14,9 @@ provider "google" {
   zone        = var.zone
 }
 
-resource "google_compute_address" "n8n_static_ip" {
-  name = "n8n-static-ip"
-}
+# resource "google_compute_address" "n8n_static_ip" {
+#   name = "n8n-static-ip"
+# }
 
 resource "google_compute_firewall" "n8n_firewall" {
   name    = "n8n-firewall"
@@ -63,9 +63,9 @@ resource "google_compute_instance" "n8n_server" {
 
   network_interface {
     network = "default"
-    access_config {
-      nat_ip = google_compute_address.n8n_static_ip.address
-    }
+    # access_config {
+    #   nat_ip = google_compute_address.n8n_static_ip.address
+    # }
   }
 
   metadata_startup_script = <<-EOT
