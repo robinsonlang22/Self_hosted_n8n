@@ -26,6 +26,21 @@ Deploying commercial automation tools on public-facing ports introduces unaccept
 
 ### 🚀 Infrastructure Deployment Guide
 
+**1. Provision GCP Resources (Terraform)**
+[cite_start]Ensure `keys/my_credentials.json` is configured [cite: 14] and your variables are populated (note: sensitive variables like OAuth secrets are excluded from version control via `.gitignore`).
+```bash
+terraform init
+terraform plan
+terraform apply
+```
+
+**2. Initialize Orchestration Engine (Docker Compose)
+SSH into the provisioned instance via the IAP Tunnel (allow-iap-ssh on port 22), configure your .env file, and spin up the services:
+```bash
+docker-compose up -d
+```
+Note: The GCP Global Load Balancer and managed SSL certificates may require 20-40 minutes to fully propagate globally upon initial deployment.
+
 ---
 
 🤖 Part 2: AI & LLM Automation Workflows
@@ -68,9 +83,3 @@ Activate the workflow to initiate the automated cron schedules.
 The next phase of this architecture will introduce Human-in-the-Loop (HITL) capabilities. This is a critical requirement for high-stakes commercial compliance (such as AI-based medical image analysis or automated CV processing).
 
 Future workflows will demonstrate how automated AI agents can pre-process sensitive payloads, isolate edge cases, and route high-confidence findings to a human operator for final validation before downstream execution.
-**1. Provision GCP Resources (Terraform)**
-[cite_start]Ensure `keys/my_credentials.json` is configured [cite: 14] and your variables are populated (note: sensitive variables like OAuth secrets are excluded from version control via `.gitignore`).
-```bash
-terraform init
-terraform plan
-terraform apply
