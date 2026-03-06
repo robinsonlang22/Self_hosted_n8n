@@ -5,9 +5,7 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![n8n](https://img.shields.io/badge/n8n-Workflow_Automation-FF6D5A?logo=n8n&logoColor=white)](https://n8n.io/)
 
-This repository contains an Infrastructure as Code (IaC) deployment and business logic workflows for a self-hosted, enterprise-grade **n8n orchestration platform**. 
-
-Built entirely on Google Cloud Platform (GCP)[cite: 9], this architecture is designed to handle sensitive data pipelines (such as automated payload parsing and AI-assisted data screening) by enforcing strict Zero-Trust security protocols and enabling advanced Large Language Model (LLM) orchestration.
+This repository contains several business logic workflows deploy on a self-hosted, enterprise-grade **n8n orchestration platform** which is built by Infrastructure as Code (IaC) and entirely deploy on Google Cloud. This architecture is designed to handle sensitive data pipelines by enforcing strict Zero-Trust security protocols and enabling advanced Large Language Model (LLM) orchestration.
 
 ---
 
@@ -15,19 +13,17 @@ Built entirely on Google Cloud Platform (GCP)[cite: 9], this architecture is des
 
 Deploying commercial automation tools on public-facing ports introduces unacceptable security risks. This project implements a **Zero-Trust Network Architecture**, ensuring the backend infrastructure remains entirely inaccessible from the public internet.
 
-
-
 ### 🌟 Enterprise Infrastructure Highlights
-* [cite_start]**Google Identity-Aware Proxy (IAP)**: All administrative access to the n8n orchestration engine is intercepted and authenticated via Google OAuth at the edge[cite: 4, 16]. 
-* [cite_start]**Host-Based Traffic Routing**: The GCP Global Load Balancer dynamically routes traffic based on URL maps[cite: 6]. [cite_start]Public endpoints can bypass IAP [cite: 3][cite_start], while administrative and sensitive backends enforce strict identity verification[cite: 4].
-* **Publicly Inaccessible Backend**: The Google Compute Engine instance has no public ingress ports exposed for the application. [cite_start]GCP Firewall rules strictly limit inbound HTTP/HTTPS traffic exclusively to Google's Edge nodes (`35.191.0.0/16`, `130.211.0.0/22`)[cite: 5, 15].
-* [cite_start]**Automated SSL & Internal Routing**: Public certificates are provisioned and managed globally via GCP Managed SSL[cite: 7], while internal container routing and automated DNS challenges are securely handled via Traefik v3.
+**Google Identity-Aware Proxy (IAP)**: All administrative access to the n8n orchestration engine is intercepted and authenticated via Google OAuth at the edge. 
+**Host-Based Traffic Routing**: The GCP Global Load Balancer dynamically routes traffic based on URL maps. Public endpoints can bypass IAP, e.g., homepage, while administrative and sensitive backends enforce strict identity verification, like n8n login page.
+* **Publicly Inaccessible Backend**: The Google Compute Engine instance has no public ingress ports exposed for the application. GCP Firewall rules strictly limit inbound HTTP/HTTPS traffic exclusively to Google's Edge nodes (`35.191.0.0/16`, `130.211.0.0/22`).
+* **Automated SSL & Internal Routing**: Public certificates are provisioned and managed globally via GCP Managed SSL, while internal container routing and automated DNS challenges are securely handled via Traefik v3.
 * **Persistent Database**: Utilizes a robust PostgreSQL 16 database with automated health checks for workflow state management.
 
 ### 🚀 Infrastructure Deployment Guide
 
 **1. Provision GCP Resources (Terraform)**
-[cite_start]Ensure `keys/my_credentials.json` is configured [cite: 14] and your variables are populated (note: sensitive variables like OAuth secrets are excluded from version control via `.gitignore`).
+Ensure `keys/my_credentials.json` is configured and your variables are populated (note: sensitive variables like OAuth secrets are excluded from version control via `.gitignore`).
 ```bash
 terraform init
 terraform plan
@@ -35,15 +31,15 @@ terraform apply
 ```
 
 **2. Initialize Orchestration Engine (Docker Compose)
-SSH into the provisioned instance via the IAP Tunnel (allow-iap-ssh on port 22), configure your .env file, and spin up the services:
+SSH into the provisioned instance via the IAP Tunnel (allow-iap-ssh on port 22), configure your .env file, and one-click startup the services:
 ```bash
 docker-compose up -d
 ```
-Note: The GCP Global Load Balancer and managed SSL certificates may require 20-40 minutes to fully propagate globally upon initial deployment.
+Note: The GCP Global Load Balancer and managed SSL certificates may require 20-40 minutes to fully propagate globally upon initial deployment. To expedite the validation process, ensure your DNS records are set to "DNS Only" until the certificate status becomes ACTIVE. This allows Google's validation servers to directly reach your load balancer and verify domain ownership.
 
 ---
 
-## 🤖 Part 2: AI & LLM Automation Workflows
+## 🤖 Part 2: AI Automation Workflows
 To demonstrate the platform's orchestration capabilities, this repository includes functional AI workflows that integrate external APIs, custom computing logic, and Large Language Models.
 
 ### 🌤️ Proof of Concept: Context-Aware LLM Assistant
@@ -79,5 +75,25 @@ Activate the workflow to initiate the automated cron schedules.
 
 ---
 
-## 🔮 Future Roadmap: Human-in-the-Loop (HITL) and Reinforcement learning from human feedback (RLHF) Integration
-The next phase of this architecture，I want to build a application in topics like Human-in-the-Loop (HITL) and Reinforcement learning from human feedback (RLHF). This is a critical requirement for high-stakes commercial compliance. Future workflows will demonstrate how automated AI agents can pre-process sensitive payloads, isolate edge cases, and route high-confidence findings to a human operator for final validation before downstream execution.
+## 🔮 Future Roadmap: Compliance-First AI workflow: integrate Human-in-the-Loop (HITL) & Reinforcement learning from human feedback (RLHF)
+The next evolution of this platform focuses on high-stakes commercial compliance by implementing Human-in-the-Loop (HITL) and Reinforcement Learning from Human Feedback (RLHF). This phase demonstrates how to constrain Large Language Models (LLMs) to ensure output quality, mitigate hallucinations, and maintain professional rigor.
+
+### 🎯 Objective: Corporate-Aligned AI Communication
+Instead of allowing autonomous agents to operate without oversight, this workflow enforces a multi-stage validation process for customer-facing content (Emails, Support Tickets, Quotes).
+
+1. Constrained Generation (The AI Agent)Brand & Persona Alignment: AI agents are grounded in specific corporate "Brand Voice" documents.Product Parameter Ingestion: The model is fed real-time product specifications and technical constraints to prevent factual errors.Hallucination Mitigation: By using Retrieval-Augmented Generation (RAG) combined with strict system prompts, the model is restricted from making unauthorized promises or inventing product capabilities.
+2. Human-in-the-Loop (HITL) ValidationIsolation of Edge Cases: Low-confidence outputs or sensitive inquiries (e.g., refund requests, medical data queries) are automatically flagged and routed to a secure human-operator interface.The "Wait for Approval" Gate: Utilizing n8n's asynchronous webhook nodes, the workflow pauses execution until a human reviews the draft via a custom, IAP-protected dashboard.Manual Correction: Operators can approve, reject, or "edit-to-fix" the AI’s draft, ensuring 100% compliance before the final payload is dispatched.
+3. Data Collection for RLHFFeedback Logging: Every human intervention (edit or rejection) is logged as a "correction pair."Model Optimization: This structured data serves as the foundation for Reinforcement Learning from Human Feedback. Over time, these correction pairs are used to fine-tune the model's reward system, training the AI to "prefer" the tone and accuracy favored by human experts.
+
+### 🛡️ Business Value: Quality & Robustness
+Error Prevention: Eliminates the risk of "rogue AI" damaging brand reputation through impolite or inaccurate responses.
+
+Operational Scalability: Allows a small team of human experts to oversee thousands of AI-generated messages, only intervening where the AI's confidence score falls below a set threshold.
+
+Compliance Ready: Provides a full audit trail of who approved what content and when—a mandatory requirement for medical, legal, and financial sectors.
+
+### 🚀 Implementation PreviewThe upcoming workflow will feature:
+Sentiment & Tone Analysis: Pre-check nodes to verify professional etiquette.
+Secure Operator Portal: An IAP-authenticated internal site for human reviewers.
+Automated Feedback Loop: A PostgreSQL-based logging system to store "Human-Approved" vs "AI-Original" text for future RLHF fine-tuning.
+
