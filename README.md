@@ -11,7 +11,7 @@ This repository contains an Infrastructure as Code (IaC) deployment and business
 
 ---
 
-## 🏗️ Part 1: Zero-Trust Cloud Architecture (Self-Hosted n8n)
+## 🏗️ Part 1: Zero-Trust Cloud Architecture (Self-Hosting n8n)
 
 Deploying commercial automation tools on public-facing ports introduces unacceptable security risks. This project implements a **Zero-Trust Network Architecture**, ensuring the backend infrastructure remains entirely inaccessible from the public internet.
 
@@ -43,15 +43,15 @@ Note: The GCP Global Load Balancer and managed SSL certificates may require 20-4
 
 ---
 
-🤖 Part 2: AI & LLM Automation Workflows
+## 🤖 Part 2: AI & LLM Automation Workflows
 To demonstrate the platform's orchestration capabilities, this repository includes functional AI workflows that integrate external APIs, custom computing logic, and Large Language Models.
 
-🌤️ Proof of Concept: Context-Aware LLM Assistant
+### 🌤️ Proof of Concept: Context-Aware LLM Assistant
 File: projects/Halle-Weather-Assistant.json
 
 While initially framed as a localized automated assistant, this workflow serves as a technical Proof of Concept (PoC) for context-aware data processing, real-time API integrations, and dynamic prompt engineering.
 
-✨ Technical Workflow Capabilities
+### ✨ Technical Workflow Capabilities
 Dynamic Data Ingestion: High-fidelity data retrieval via REST APIs (Open-Meteo) triggered by highly specific Cron scheduling.
 
 Native Compute Engine (JS): Utilizes n8n's Code Node to execute native JavaScript. It performs precise timezone reconciliation (UTC to Europe/Berlin) and calculates complex conditional logic (e.g., exact time deltas to sunrise/sunset based on ISO strings).
@@ -66,7 +66,7 @@ Enforces strict output formatting and persona adoption (e.g., adjusting tone dyn
 
 Automated Dispatch: Seamless webhook and API integration for downstream payload delivery (Telegram API).
 
-🛠️ How to Import Workflows
+### 🛠️ How to Import Workflows
 Access your authenticated n8n instance.
 
 Navigate to workflows and select "Import from File".
@@ -79,7 +79,7 @@ Activate the workflow to initiate the automated cron schedules.
 
 ---
 
-🔮 Future Roadmap: Human-in-the-Loop (HITL) Integration
+## 🔮 Future Roadmap: Human-in-the-Loop (HITL) Integration
 The next phase of this architecture will introduce Human-in-the-Loop (HITL) capabilities. This is a critical requirement for high-stakes commercial compliance (such as AI-based medical image analysis or automated CV processing).
 
 Future workflows will demonstrate how automated AI agents can pre-process sensitive payloads, isolate edge cases, and route high-confidence findings to a human operator for final validation before downstream execution.
