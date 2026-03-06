@@ -26,6 +26,48 @@ Deploying commercial automation tools on public-facing ports introduces unaccept
 
 ### 🚀 Infrastructure Deployment Guide
 
+---
+
+🤖 Part 2: AI & LLM Automation Workflows
+To demonstrate the platform's orchestration capabilities, this repository includes functional AI workflows that integrate external APIs, custom computing logic, and Large Language Models.
+
+🌤️ Proof of Concept: Context-Aware LLM Assistant
+File: projects/Halle-Weather-Assistant.json
+
+While initially framed as a localized automated assistant, this workflow serves as a technical Proof of Concept (PoC) for context-aware data processing, real-time API integrations, and dynamic prompt engineering.
+
+✨ Technical Workflow Capabilities
+Dynamic Data Ingestion: High-fidelity data retrieval via REST APIs (Open-Meteo) triggered by highly specific Cron scheduling.
+
+Native Compute Engine (JS): Utilizes n8n's Code Node to execute native JavaScript. It performs precise timezone reconciliation (UTC to Europe/Berlin) and calculates complex conditional logic (e.g., exact time deltas to sunrise/sunset based on ISO strings).
+
+LLM Orchestration (Gemini 2.5 Flash):
+
+Integrates Google's Gemini models via LangChain nodes.
+
+Injects dynamic payloads (real-time temperature, time-to-event metrics) directly into the LLM prompt context.
+
+Enforces strict output formatting and persona adoption (e.g., adjusting tone dynamically based on the day/night cycle calculations).
+
+Automated Dispatch: Seamless webhook and API integration for downstream payload delivery (Telegram API).
+
+🛠️ How to Import Workflows
+Access your authenticated n8n instance.
+
+Navigate to workflows and select "Import from File".
+
+Choose the target JSON file (e.g., projects/Halle-Weather-Assistant.json).
+
+In the n8n Credentials panel, configure the required API keys (e.g., Google Gemini Api account, Telegram account).
+
+Activate the workflow to initiate the automated cron schedules.
+
+---
+
+🔮 Future Roadmap: Human-in-the-Loop (HITL) Integration
+The next phase of this architecture will introduce Human-in-the-Loop (HITL) capabilities. This is a critical requirement for high-stakes commercial compliance (such as AI-based medical image analysis or automated CV processing).
+
+Future workflows will demonstrate how automated AI agents can pre-process sensitive payloads, isolate edge cases, and route high-confidence findings to a human operator for final validation before downstream execution.
 **1. Provision GCP Resources (Terraform)**
 [cite_start]Ensure `keys/my_credentials.json` is configured [cite: 14] and your variables are populated (note: sensitive variables like OAuth secrets are excluded from version control via `.gitignore`).
 ```bash
