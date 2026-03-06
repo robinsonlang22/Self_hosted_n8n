@@ -86,14 +86,12 @@ Instead of allowing autonomous agents to operate without oversight, this workflo
 3. Data Collection for RLHFFeedback Logging: Every human intervention (edit or rejection) is logged as a "correction pair."Model Optimization: This structured data serves as the foundation for Reinforcement Learning from Human Feedback. Over time, these correction pairs are used to fine-tune the model's reward system, training the AI to "prefer" the tone and accuracy favored by human experts.
 
 ### 🛡️ Business Value: Quality & Robustness
-Error Prevention: Eliminates the risk of "rogue AI" damaging brand reputation through impolite or inaccurate responses.
-
-Operational Scalability: Allows a small team of human experts to oversee thousands of AI-generated messages, only intervening where the AI's confidence score falls below a set threshold.
-
-Compliance Ready: Provides a full audit trail of who approved what content and when—a mandatory requirement for medical, legal, and financial sectors.
+1. Error Prevention: Eliminates the risk of "rogue AI" damaging brand reputation through impolite or inaccurate responses.
+2. Operational Scalability: Allows a small team of human experts to oversee thousands of AI-generated messages, only intervening where the AI's confidence score falls below a set threshold.
+3. Compliance Ready: Provides a full audit trail of who approved what content and when—a mandatory requirement for medical, legal, and financial sectors.
 
 ### 🚀 Implementation PreviewThe upcoming workflow will feature:
-Sentiment & Tone Analysis: Pre-check nodes to verify professional etiquette.
-Secure Operator Portal: An IAP-authenticated internal site for human reviewers.
-Automated Feedback Loop: A PostgreSQL-based logging system to store "Human-Approved" vs "AI-Original" text for future RLHF fine-tuning.
+1. Sentiment & Tone Analysis: Pre-check nodes to verify professional etiquette.
+2. Secure Operator Portal: An IAP-authenticated internal site for human reviewers.
+3. Automated Feedback Loop: A PostgreSQL-based logging system to store "Human-Approved" vs "AI-Original" text for future RLHF fine-tuning.
 
