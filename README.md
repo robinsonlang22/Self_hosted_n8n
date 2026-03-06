@@ -79,5 +79,5 @@ Activate the workflow to initiate the automated cron schedules.
 
 ---
 
-## 🔮 Future Roadmap: Human-in-the-Loop (HITL) Integration
+## 🔮 Future Roadmap: Human-in-the-Loop (HITL) and Reinforcement learning from human feedback (RLHF) Integration
 The next phase of this architecture，I want to build a application in topics like Human-in-the-Loop (HITL) and Reinforcement learning from human feedback (RLHF). This is a critical requirement for high-stakes commercial compliance. Future workflows will demonstrate how automated AI agents can pre-process sensitive payloads, isolate edge cases, and route high-confidence findings to a human operator for final validation before downstream execution.
