@@ -18,6 +18,25 @@ provider "google" {
 #   name = "n8n-static-ip"
 # }
 
+resource "google_compute_router" "n8n_router" {
+  name    = "n8n-router"
+  network = "default"
+  region  = var.region
+}
+
+resource "google_compute_router_nat" "n8n_nat" {
+  name                               = "n8n-nat-config"
+  router                             = google_compute_router.n8n_router.name
+  region                             = var.region
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+
+  log_config {
+    enable = true
+    filter = "ERRORS_ONLY"
+  }
+}
+
 resource "google_compute_firewall" "n8n_firewall" {
   name    = "n8n-firewall"
   network = "default"
