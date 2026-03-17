@@ -39,7 +39,7 @@ Note: The GCP Global Load Balancer and managed SSL certificates may require 20-4
 
 ---
 
-## 🤖 Part 2: AI Automation Workflows
+## 🤖 Part 2: Case Study Smart Weather Assistant
 To demonstrate the platform's orchestration capabilities, this repository includes functional AI workflows that integrate external APIs, custom computing logic, and Large Language Models.
 
 ### 🌤️ Proof of Concept: Context-Aware LLM Assistant
